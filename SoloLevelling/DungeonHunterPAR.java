@@ -61,17 +61,19 @@ public class DungeonHunterPAR {
     }
 
     /** Runs all Hunts in parallel and returns (maxVal, finderIndex). */
-    static Result runParallelSearches(Hunt[] searches, int desiredParallelism) {
+    static Result runParallelSearches(Hunt[] searches) {
         int n = searches.length;
         if (n == 0) return new Result(Integer.MIN_VALUE, -1);
 
-        int cores = Math.max(1, (desiredParallelism > 0) ? desiredParallelism
-                                                         : Runtime.getRuntime().availableProcessors());
-        int cutoff = Math.max(1, n / (cores * 8));
+        // Parallelism is whatever the commonPool decides (usually availableProcessors()).
+        int cores = Math.max(1, Runtime.getRuntime().availableProcessors());
 
-        ForkJoinPool pool = (desiredParallelism > 0)
-                ? new ForkJoinPool(desiredParallelism)
-                : ForkJoinPool.commonPool();
+        // Granularity: ~ (cores * k) leaf tasks; default k=8, override with -Ddh.cutoffFactor=K
+        int k = Integer.getInteger("dh.cutoffFactor", 8);
+        int cutoff = Math.max(1, n / Math.max(1, cores * k));
+
+        // Use the common pool (no explicit thread control here)
+        ForkJoinPool pool = ForkJoinPool.commonPool();
 
         return pool.invoke(new SearchTask(searches, 0, n, cutoff));
     }
@@ -119,15 +121,12 @@ public class DungeonHunterPAR {
             searches[i] = new Hunt(i + 1, rand.nextInt(dungeonRows), rand.nextInt(dungeonColumns), dungeon);
         }
 
-        int max = Integer.MIN_VALUE;
-        int finder = -1;
-
         tick();
-        Result r = runParallelSearches(searches, 0); // 0 => commonPool
+        Result r = runParallelSearches(searches); // <-- simplified call: no desiredParallelism
         tock();
 
-        max = r.maxVal();
-        finder = r.finder();
+        int max = r.maxVal();
+        int finder = r.finder();
 
         System.out.printf("\t dungeon size: %d,\n", gateSize);
         System.out.printf("\t rows: %d, columns: %d\n", dungeonRows, dungeonColumns);
@@ -147,3 +146,4 @@ public class DungeonHunterPAR {
         dungeon.visualisePowerMap("visualiseSearchPathParallel.png", true);
     }
 }
+
