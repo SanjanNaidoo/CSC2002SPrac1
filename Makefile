@@ -11,7 +11,7 @@ SER_SRCS := $(SRC)/DungeonMap.java $(SRC)/Hunt.java $(SRC)/$(SER).java
 PAR_SRC  := $(SRC)/$(PAR).java
 
 # Override at call: make run ARGS="100 0.2 0"
-ARGS ?= 20 0.2 1
+ARGS ?= 50 0.10 1
 
 .PHONY: all serial parallel run run-par clean
 

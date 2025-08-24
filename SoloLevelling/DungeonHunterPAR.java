@@ -143,7 +143,7 @@ public class DungeonHunterPAR {
         System.out.printf("x=%.1f y=%.1f\n\n",
                 dungeon.getXcoord(searches[finder].getPosRow()),
                 dungeon.getYcoord(searches[finder].getPosCol()));
-        dungeon.visualisePowerMap("visualiseSearch.png", false);
-        dungeon.visualisePowerMap("visualiseSearchPath.png", true);
+        dungeon.visualisePowerMap("visualiseSearchParallel.png", false);
+        dungeon.visualisePowerMap("visualiseSearchPathParallel.png", true);
     }
 }
