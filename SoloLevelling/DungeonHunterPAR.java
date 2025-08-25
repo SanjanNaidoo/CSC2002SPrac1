@@ -69,7 +69,7 @@ public class DungeonHunterPAR {
         int cores = Math.max(1, Runtime.getRuntime().availableProcessors());
 
         // Granularity: ~ (cores * k) leaf tasks; default k=8, override with -Ddh.cutoffFactor=K
-        int k = Integer.getInteger("dh.cutoffFactor", 8);
+        int k = 16;
         int cutoff = Math.max(1, n / Math.max(1, cores * k));
 
         // Use the common pool (no explicit thread control here)

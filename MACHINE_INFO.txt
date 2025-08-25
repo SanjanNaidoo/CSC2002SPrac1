@@ -1,0 +1,6 @@
+Darwin Sanjans-MacBook-Pro.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64
+Apple M1 Pro
+8
+8
+Matching Java Virtual Machines (3):
+openjdk version "24.0.2" 2025-07-15
